@@ -18,12 +18,12 @@ class ImageFetcher: NSObject {
     
     func downloadImage(withURL URL: URL, completionBlock: @escaping (UIImage?, RequestError?) -> Void) {
         if let imageFromCache = cache.object(forKey: URL as AnyObject) {
-            print("get image from cache: \(URL)")
             completionBlock(imageFromCache, nil)
             return
         }
         
         let task = URLSession.shared.dataTask(with: URL) { [unowned self] (data, response, error) in
+            self.tasks[URL] = nil
             if let error = error {
                 let requestError: RequestError
                 switch error {
